@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drivedesk — Software voor garages, handelaren en verhuurders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F8F8F6;
+  --paper:#FFFFFF;
+  --ink:#080C14;
+  --ink-soft:#1E2535;
+  --muted:#6B7280;
+  --accent:#0057FF;
+  --accent-dark:#0040CC;
+  --hero-bg:#060B18;
+  --hero-surface:#0D1526;
+  --hero-border:rgba(255,255,255,0.07);
+  --line:rgba(8,12,20,0.08);
+  --gold:#F59E0B;
+  --green:#10B981;
+  --red:#EF4444;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.display{font-family:'Syne',sans-serif}
+.mono{font-family:'JetBrains Mono',monospace}
+.lang-en .nl,.lang-nl .en{display:none}
+
+/* ===== ANNOUNCEMENT ===== */
+.announcement{background:var(--accent);color:white;text-align:center;padding:10px 24px;font-size:13px;font-weight:500}
+.announcement a{color:white;text-decoration:underline;text-underline-offset:3px}
+
+/* ===== NAV ===== */
+nav{position:sticky;top:0;z-index:100;background:rgba(6,11,24,0.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--hero-border);padding:0 40px}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+
+/* LOGO VERBETERD */
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:21px;letter-spacing:-0.3px}
+.logo-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,#0057FF 0%,#0077FF 100%);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,87,255,0.35);
+  position:relative;
+}
+.logo-icon::after{
+  content:'';position:absolute;inset:0;border-radius:9px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+}
+
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;font-weight:400;padding:8px 14px;border-radius:6px;transition:all 0.15s}
+.nav-links a:hover{color:white;background:rgba(255,255,255,0.07)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,0.06);border:1px solid var(--hero-border);border-radius:6px;overflow:hidden}
+.lang-btn{padding:6px 12px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.15s;font-family:'JetBrains Mono',monospace;background:transparent;border:none;letter-spacing:0.05em}
+.lang-btn.active{background:var(--accent);color:white}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--accent);color:white}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.btn-ghost-light{background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15)}
+.btn-ghost-light:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.3)}
+.btn-dark{background:var(--ink);color:white}
+.btn-dark:hover{background:var(--ink-soft)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-outline:hover{border-color:var(--ink)}
+.btn-lg{padding:14px 28px;font-size:15px}
+
+/* ===== HERO ===== */
+.hero{background:var(--hero-bg);color:white;padding:100px 40px 80px;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black,transparent)}
+.hero-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(0,87,255,0.16) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,87,255,0.1);border:1px solid rgba(0,87,255,0.22);padding:6px 14px 6px 8px;border-radius:999px;font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:32px}
+.hero-badge-dot{width:20px;height:20px;background:var(--accent);border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px}
+h1.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,8vw,96px);line-height:0.95;letter-spacing:-3px;margin-bottom:28px;max-width:900px}
+h1.hero-title .accent{color:var(--accent)}
+.hero-sub{font-size:clamp(17px,2vw,20px);color:rgba(255,255,255,0.55);max-width:580px;line-height:1.55;margin-bottom:40px;font-weight:300}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:72px}
+.hero-note{font-size:12px;color:rgba(255,255,255,0.28);margin-top:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em}
+
+/* MOCKUP */
+.mockup-wrap{position:relative;max-width:1100px}
+.mockup-wrap::before{content:'';position:absolute;bottom:-60px;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,var(--hero-bg));z-index:2;pointer-events:none}
+.mockup{background:var(--hero-surface);border:1px solid var(--hero-border);border-radius:12px;box-shadow:0 0 0 1px rgba(0,87,255,0.08),0 40px 100px rgba(0,0,0,0.5);overflow:hidden;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.mock-bar{background:#0A1020;padding:13px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--hero-border)}
+.mock-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.1)}
+.mock-url{margin-left:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.22)}
+.mock-body{display:grid;grid-template-columns:210px 1fr;min-height:400px}
+.mock-side{background:#080E1C;border-right:1px solid var(--hero-border);padding:20px 14px}
+.mock-side-cat{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.22);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 6px}
+.mock-side-item{padding:9px 11px;border-radius:6px;font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.mock-side-item.on{background:rgba(0,87,255,0.14);color:white;font-weight:500}
+.mock-side-item.on::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.mock-main{padding:28px 32px}
+.mock-crumb{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.22);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.mock-h{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:white;margin-bottom:4px}
+.mock-sub{font-size:13px;color:rgba(255,255,255,0.32);margin-bottom:22px}
+.mock-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hero-border);border:1px solid var(--hero-border);border-radius:8px;overflow:hidden;margin-bottom:22px}
+.mock-stat{background:#0D1526;padding:14px 16px}
+.mock-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.28);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.mock-stat-v{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:white;line-height:1}
+.mock-stat-t{font-size:11px;color:#10B981;margin-top:4px;font-weight:500}
+.mock-stat:nth-child(1){border-left:2px solid #10B981}
+.mock-stat:nth-child(2){border-left:2px solid var(--accent)}
+.mock-stat:nth-child(3){border-left:2px solid #F59E0B}
+.mock-stat:nth-child(4){border-left:2px solid rgba(255,255,255,0.15)}
+.mock-table{width:100%;border-collapse:collapse}
+.mock-table th{text-align:left;padding:8px 0;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.22);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--hero-border)}
+.mock-table td{padding:11px 0;font-size:13px;color:rgba(255,255,255,0.6);border-bottom:1px solid rgba(255,255,255,0.04)}
+.mock-kt{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:white}
+.mock-pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:500}
+.pill-green{background:rgba(16,185,129,0.14);color:#10B981}
+.pill-blue{background:rgba(0,87,255,0.14);color:#60A5FA}
+.pill-amber{background:rgba(245,158,11,0.14);color:#F59E0B}
+
+/* ===== STATS BAR ===== */
+.stats-bar{background:var(--paper);border-bottom:1px solid var(--line);padding:48px 40px}
+.stats-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.stat-item{text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(36px,4vw,52px);font-weight:800;color:var(--ink);letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.stat-num span{color:var(--accent)}
+.stat-label{font-size:14px;color:var(--muted);font-weight:400}
+
+/* ===== SOCIAL PROOF ===== */
+.social-proof{background:var(--bg);padding:40px 40px;border-bottom:1px solid var(--line)}
+.sp-inner{max-width:1280px;margin:0 auto}
+.sp-label{text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
+.sp-logos{display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap}
+.sp-logo{
+  padding:14px 32px;border-right:1px solid var(--line);
+  font-family:'Syne',sans-serif;font-weight:700;font-size:15px;
+  color:rgba(8,12,20,0.2);letter-spacing:-0.3px;
+  transition:color 0.2s;
+}
+.sp-logo:last-child{border-right:none}
+.sp-logo:hover{color:var(--ink)}
+
+/* ===== SECTION BASICS ===== */
+section{padding:100px 40px}
+.wrap{max-width:1280px;margin:0 auto}
+.section-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
+h2.section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,5vw,60px);letter-spacing:-2px;line-height:1.05;color:var(--ink);margin-bottom:16px}
+h2.section-title .accent{color:var(--accent)}
+.section-sub{font-size:18px;color:var(--muted);max-width:600px;line-height:1.6;font-weight:300}
+
+/* ===== PAIN ===== */
+.pain{background:var(--bg)}
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:60px}
+.pain-items{display:flex;flex-direction:column;gap:0}
+.pain-item{padding:20px 0;border-bottom:1px solid var(--line);display:flex;gap:16px;align-items:start}
+.pain-item:first-child{border-top:1px solid var(--line)}
+.pain-icon{width:36px;height:36px;background:rgba(239,68,68,0.07);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.pain-text strong{display:block;font-size:15px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.pain-text span{font-size:14px;color:var(--muted)}
+
+/* ===== SOLUTION ===== */
+.solution{background:var(--paper)}
+.sol-head{text-align:center;margin-bottom:64px}
+.sol-head .section-eyebrow{justify-content:center}
+.sol-head .section-eyebrow::before{display:none}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.sol-card{padding:36px 28px;border-radius:16px;border:1px solid var(--line);transition:all 0.2s;position:relative;overflow:hidden}
+.sol-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity 0.2s}
+.sol-card:hover{border-color:rgba(0,87,255,0.2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,87,255,0.07)}
+.sol-card:hover::before{opacity:1}
+.sol-icon{width:48px;height:48px;background:rgba(0,87,255,0.07);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.sol-card h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px;letter-spacing:-0.3px}
+.sol-card p{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* ===== VIDEO ===== */
+.video-section{background:var(--hero-bg);padding:100px 40px;color:white}
+.video-inner{max-width:1280px;margin:0 auto}
+.video-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-bottom:56px}
+.video-head h2{color:white}
+.video-head .section-sub{color:rgba(255,255,255,0.5)}
+.video-head .section-eyebrow{color:rgba(0,87,255,0.8)}
+.video-head .section-eyebrow::before{background:rgba(0,87,255,0.8)}
+.video-player{
+  position:relative;border-radius:16px;overflow:hidden;
+  background:#0D1526;border:1px solid var(--hero-border);
+  box-shadow:0 40px 80px rgba(0,0,0,0.4);
+  cursor:pointer;
+}
+.video-thumb{
+  aspect-ratio:16/9;
+  background:linear-gradient(135deg,#0A1020 0%,#0D1A35 50%,#0A1020 100%);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.video-thumb-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.video-play{
+  width:72px;height:72px;
+  background:var(--accent);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+  box-shadow:0 0 0 12px rgba(0,87,255,0.12),0 0 0 24px rgba(0,87,255,0.06);
+  transition:all 0.3s;
+}
+.video-player:hover .video-play{transform:scale(1.08);box-shadow:0 0 0 16px rgba(0,87,255,0.15),0 0 0 32px rgba(0,87,255,0.07)}
+.video-play svg{margin-left:4px}
+.video-label{
+  position:absolute;bottom:20px;left:20px;right:20px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:rgba(255,255,255,0.5);letter-spacing:0.05em;
+  background:rgba(6,11,24,0.8);padding:10px 14px;border-radius:8px;
+  border:1px solid var(--hero-border);
+  backdrop-filter:blur(8px);
+}
+.video-timestamp{color:var(--accent)}
+.video-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--hero-border);
+  border:1px solid var(--hero-border);border-top:none;
+  border-radius:0 0 16px 16px;
+}
+.video-stat{background:var(--hero-surface);padding:16px 20px;text-align:center}
+.video-stat-v{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px}
+.video-stat-l{font-size:12px;color:rgba(255,255,255,0.35)}
+
+/* ===== FEATURES ===== */
+.features{background:var(--paper);padding:100px 40px}
+.feat-head{text-align:center;margin-bottom:64px}
+.feat-head h2{letter-spacing:-2px}
+.feat-head .section-eyebrow{justify-content:center}
+.feat-head .section-eyebrow::before{display:none}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.feat-item{background:var(--paper);padding:36px 28px;transition:background 0.2s}
+.feat-item:hover{background:var(--bg)}
+.feat-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);opacity:0.6;letter-spacing:0.15em;margin-bottom:16px}
+.feat-item h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-0.2px}
+.feat-item p{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* ===== TESTIMONIAL ===== */
+.testimonial{background:var(--bg);padding:100px 40px}
+.test-inner{max-width:900px;margin:0 auto;text-align:center}
+.test-stars{color:var(--gold);font-size:18px;margin-bottom:16px;letter-spacing:2px}
+.test-quote-mark{font-family:'Syne',sans-serif;font-size:100px;line-height:0.6;color:var(--accent);opacity:0.2;margin-bottom:8px}
+.test-quote{font-family:'DM Sans',sans-serif;font-style:italic;font-weight:300;font-size:clamp(20px,3vw,30px);line-height:1.4;color:var(--ink);margin-bottom:36px;letter-spacing:-0.3px}
+.test-quote strong{font-style:normal;font-weight:600;color:var(--accent)}
+.test-author{display:flex;align-items:center;justify-content:center;gap:16px}
+.test-avatar{width:48px;height:48px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:white}
+.test-who strong{display:block;font-size:15px;font-weight:500}
+.test-who span{font-size:13px;color:var(--muted)}
+
+/* ===== PRICING ===== */
+.pricing{background:var(--paper);padding:100px 40px}
+.price-head{text-align:center;margin-bottom:64px}
+.price-note{display:inline-block;background:rgba(0,87,255,0.06);border:1px solid rgba(0,87,255,0.12);padding:8px 18px;border-radius:999px;font-size:13px;color:var(--accent);font-weight:500;margin-bottom:24px}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto}
+.price-card{background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:36px 28px;display:flex;flex-direction:column;transition:all 0.2s;position:relative}
+.price-card:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(0,0,0,0.07)}
+.price-card.featured{background:var(--ink);color:white;border-color:var(--ink);box-shadow:0 20px 60px rgba(8,12,20,0.2);transform:scale(1.03)}
+.price-card.featured:hover{transform:scale(1.03) translateY(-3px)}
+.featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;padding:5px 16px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.price-tier{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.price-card.featured .price-tier{color:rgba(255,255,255,0.35)}
+.price-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.price-tagline{font-size:14px;color:var(--muted);margin-bottom:28px;font-weight:300}
+.price-card.featured .price-tagline{color:rgba(255,255,255,0.45)}
+.price-amt{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:6px}
+.price-amt sup{font-size:24px;vertical-align:top;letter-spacing:0}
+.price-amt sub{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:400;vertical-align:baseline;letter-spacing:0;opacity:0.6}
+.price-divider{height:1px;background:var(--line);margin:24px 0}
+.price-card.featured .price-divider{background:rgba(255,255,255,0.1)}
+.price-list{list-style:none;margin-bottom:32px;flex:1}
+.price-list li{padding:8px 0;font-size:14px;display:flex;gap:10px;align-items:start;border-bottom:1px solid rgba(8,12,20,0.04)}
+.price-card.featured .price-list li{border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
+.price-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;font-size:13px}
+.price-card .btn{justify-content:center;width:100%}
+
+/* ===== FAQ ===== */
+.faq{background:var(--bg);padding:100px 40px}
+.faq-inner{max-width:800px;margin:0 auto}
+.faq-head{text-align:center;margin-bottom:56px}
+.faq-head .section-eyebrow{justify-content:center}
+.faq-head .section-eyebrow::before{display:none}
+.faq-list{display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item:first-child{border-top:1px solid var(--line)}
+.faq-question{
+  width:100%;text-align:left;
+  padding:22px 0;background:transparent;border:none;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  font-family:'Syne',sans-serif;font-size:17px;font-weight:600;color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+}
+.faq-question:hover{color:var(--accent)}
+.faq-icon{
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(0,87,255,0.07);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all 0.2s;font-size:14px;color:var(--accent);
+}
+.faq-item.open .faq-icon{background:var(--accent);color:white;transform:rotate(45deg)}
+.faq-answer{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.3s ease,padding 0.3s ease;
+  font-size:15px;color:var(--muted);line-height:1.7;
+}
+.faq-item.open .faq-answer{max-height:300px;padding-bottom:22px}
+
+/* ===== CTA ===== */
+.cta-final{background:var(--hero-bg);color:white;padding:120px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(0,87,255,0.1) 0%,transparent 65%)}
+.cta-final h2{color:white;margin:0 auto 16px;max-width:700px}
+.cta-final .section-sub{color:rgba(255,255,255,0.45);margin:0 auto 40px}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-note{font-size:12px;color:rgba(255,255,255,0.25);margin-top:20px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em}
+
+/* ===== FOOTER ===== */
+footer{background:var(--ink);color:rgba(255,255,255,0.4);padding:56px 40px 32px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:32px}
+.footer-brand{max-width:280px}
+.footer-brand p{font-size:13px;line-height:1.6;margin-top:14px}
+.footer-links h4{font-family:'Syne',sans-serif;color:white;font-size:14px;font-weight:600;margin-bottom:16px}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:13px;transition:color 0.15s}
+.footer-links a:hover{color:white}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.7s ease forwards}
+.fade-up-d1{animation-delay:0.1s;opacity:0}
+.fade-up-d2{animation-delay:0.2s;opacity:0}
+.fade-up-d3{animation-delay:0.3s;opacity:0}
+.fade-up-d4{animation-delay:0.4s;opacity:0}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .hero,.video-section,section,.stats-bar,.social-proof,.faq{padding:70px 20px}
+  h1.hero-title{letter-spacing:-1.5px}
+  .mock-side,.mock-body .mock-main .mock-stats :nth-child(n+3){display:none}
+  .mock-body{grid-template-columns:1fr}
+  .mock-stats{grid-template-columns:repeat(2,1fr)}
+  .stats-inner,.pain-grid,.video-head{grid-template-columns:1fr;gap:32px}
+  .sol-grid,.feat-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr;max-width:440px}
+  .price-card.featured{transform:scale(1)}
+  .sp-logos{flex-direction:column;align-items:center}
+  .sp-logo{border-right:none;border-bottom:1px solid var(--line)}
+  .nav-links{display:none}
+  .footer-top{flex-direction:column}
+}
+</style>
+</head>
+<body class="lang-nl">
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement">
+  <span class="nl">🚀 Nu beschikbaar — 30 dagen gratis. Geen creditcard nodig. <a href="#pricing">Bekijk plannen →</a></span>
+  <span class="en">🚀 Now available — 30 days free. No credit card required. <a href="#pricing">View plans →</a></span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="4" fill="white"/>
+          <path d="M12 4C12 4 8 7 8 12C8 17 12 20 12 20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 4C12 4 16 7 16 12C16 17 12 20 12 20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M4 12H20" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M5 8H19" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+          <path d="M5 16H19" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </span>
+      Drivedesk
+    </a>
+    <div class="nav-links">
+      <a href="#pain" class="nl">Waarom Drivedesk</a>
+      <a href="#pain" class="en">Why Drivedesk</a>
+      <a href="#features" class="nl">Features</a>
+      <a href="#features" class="en">Features</a>
+      <a href="#faq" class="nl">FAQ</a>
+      <a href="#faq" class="en">FAQ</a>
+      <a href="#pricing" class="nl">Prijzen</a>
+      <a href="#pricing" class="en">Pricing</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('nl')">NL</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#" class="btn btn-ghost-light nl">Inloggen</a>
+      <a href="#" class="btn btn-ghost-light en">Login</a>
+      <a href="#pricing" class="btn btn-primary nl">Gratis starten</a>
+      <a href="#pricing" class="btn btn-primary en">Start free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge fade-up">
+      <span class="hero-badge-dot">✦</span>
+      <span class="nl">Het meest complete systeem voor de autobranche</span>
+      <span class="en">The most complete system for the automotive industry</span>
+    </div>
+    <h1 class="hero-title fade-up fade-up-d1">
+      <span class="nl">Minder administratie.<br><span class="accent">Meer groei.</span></span>
+      <span class="en">Less admin.<br><span class="accent">More growth.</span></span>
+    </h1>
+    <p class="hero-sub fade-up fade-up-d2">
+      <span class="nl">Drivedesk automatiseert uw volledige bedrijfsadministratie. Van werkorders tot facturen — alles in één modern systeem voor <strong style="color:rgba(255,255,255,0.85)">garages, autohandelaren, motorhandelaren en verhuurders.</strong></span>
+      <span class="en">Drivedesk automates your entire business administration. From work orders to invoices — everything in one modern system for <strong style="color:rgba(255,255,255,0.85)">garages, car dealers, motorcycle dealers and rental companies.</strong></span>
+    </p>
+    <div class="hero-actions fade-up fade-up-d3">
+      <a href="#pricing" class="btn btn-primary btn-lg nl">Gratis 30 dagen proberen →</a>
+      <a href="#pricing" class="btn btn-primary btn-lg en">Start 30 days free →</a>
+      <a href="#video" class="btn btn-ghost-light btn-lg nl">Bekijk de demo ▶</a>
+      <a href="#video" class="btn btn-ghost-light btn-lg en">Watch the demo ▶</a>
+    </div>
+    <p class="hero-note nl fade-up fade-up-d3">Geen creditcard · Maandelijks opzegbaar · Setup in 5 minuten</p>
+    <p class="hero-note en fade-up fade-up-d3">No credit card · Cancel anytime · Setup in 5 minutes</p>
+
+    <div class="mockup-wrap fade-up fade-up-d4">
+      <div class="mockup">
+        <div class="mock-bar">
+          <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+          <span class="mock-url">app.drivedesk.nl/dashboard</span>
+        </div>
+        <div class="mock-body">
+          <aside class="mock-side">
+            <div class="mock-side-cat">Werkplaats</div>
+            <div class="mock-side-item on">Werkorders</div>
+            <div class="mock-side-item">Planning</div>
+            <div class="mock-side-item">Inspecties</div>
+            <div class="mock-side-cat">Klanten</div>
+            <div class="mock-side-item">Klantenbestand</div>
+            <div class="mock-side-item">Voertuigen</div>
+            <div class="mock-side-cat">Backoffice</div>
+            <div class="mock-side-item">Facturen</div>
+            <div class="mock-side-item">Offertes</div>
+            <div class="mock-side-item">Omzet</div>
+            <div class="mock-side-item">Artikelen</div>
+          </aside>
+          <main class="mock-main">
+            <div class="mock-crumb">WERKPLAATS / WERKORDERS</div>
+            <div class="mock-h">Vandaag — <em style="font-weight:400;opacity:0.55">dinsdag 3 juni</em></div>
+            <div class="mock-sub">Werkplaats Amsterdam · 4 monteurs actief</div>
+            <div class="mock-stats">
+              <div class="mock-stat"><div class="mock-stat-l">Open</div><div class="mock-stat-v">12</div><div class="mock-stat-t">↑ +3</div></div>
+              <div class="mock-stat"><div class="mock-stat-l">Bezig</div><div class="mock-stat-v">7</div><div class="mock-stat-t">↑ +2</div></div>
+              <div class="mock-stat"><div class="mock-stat-l">Klaar</div><div class="mock-stat-v">15</div><div class="mock-stat-t">↑ +5</div></div>
+              <div class="mock-stat"><div class="mock-stat-l">Omzet</div><div class="mock-stat-v">€2.840</div><div class="mock-stat-t">↑ 18%</div></div>
+            </div>
+            <table class="mock-table">
+              <thead><tr><th>Kenteken</th><th>Klant</th><th>Type</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><span class="mock-kt">5-XGT-89</span></td><td>J. de Vries</td><td>APK</td><td><span class="mock-pill pill-green">Klaar</span></td></tr>
+                <tr><td><span class="mock-kt">NL-247-K</span></td><td>M. Bakker</td><td>Onderhoud</td><td><span class="mock-pill pill-blue">Bezig</span></td></tr>
+                <tr><td><span class="mock-kt">8-TFG-12</span></td><td>R. Jansen BV</td><td>Reparatie</td><td><span class="mock-pill pill-amber">Wacht</span></td></tr>
+                <tr><td><span class="mock-kt">SK-045-P</span></td><td>L. Smit</td><td>APK</td><td><span class="mock-pill pill-green">Klaar</span></td></tr>
+              </tbody>
+            </table>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num display">217<span>+</span></div><div class="stat-label nl">Bedrijven vertrouwen Drivedesk</div><div class="stat-label en">Businesses trust Drivedesk</div></div>
+    <div class="stat-item"><div class="stat-num display">4.2<span>u</span></div><div class="stat-label nl">Tijdsbesparing per week</div><div class="stat-label en">Time saved per week</div></div>
+    <div class="stat-item"><div class="stat-num display">98<span>%</span></div><div class="stat-label nl">Tevreden klanten</div><div class="stat-label en">Satisfied customers</div></div>
+    <div class="stat-item"><div class="stat-num display">30<span>s</span></div><div class="stat-label nl">Factuur aanmaken</div><div class="stat-label en">Create an invoice</div></div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<div class="social-proof">
+  <div class="sp-inner">
+    <div class="sp-label nl">Vertrouwd door bedrijven door heel Nederland</div>
+    <div class="sp-label en">Trusted by businesses across the Netherlands</div>
+    <div class="sp-logos">
+      <div class="sp-logo">Garage Van Dijk</div>
+      <div class="sp-logo">AutoBedrijf Vreeswijk</div>
+      <div class="sp-logo">Motorhuis Utrecht</div>
+      <div class="sp-logo">Faaya Auto Groep</div>
+      <div class="sp-logo">Pit Stop Amsterdam</div>
+      <div class="sp-logo">Auto Zuid Rotterdam</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAIN -->
+<section class="pain" id="pain">
+  <div class="wrap">
+    <div class="pain-grid">
+      <div>
+        <div class="section-eyebrow nl">Herken jij dit?</div>
+        <div class="section-eyebrow en">Sound familiar?</div>
+        <h2 class="section-title display nl">Uw tijd gaat op aan de <span class="accent">verkeerde dingen.</span></h2>
+        <h2 class="section-title display en">Your time goes to the <span class="accent">wrong things.</span></h2>
+        <p class="section-sub nl" style="margin-top:16px">Elk uur dat u bezig bent met administratie is een uur dat u niet kunt besteden aan uw klanten of de groei van uw bedrijf. Of u nu een garage runt, autos verkoopt of verhuurt — het probleem is hetzelfde.</p>
+        <p class="section-sub en" style="margin-top:16px">Every hour spent on administration is an hour you can't spend on your customers or growing your business. Whether you run a garage, sell cars or rent them — the problem is the same.</p>
+      </div>
+      <div class="pain-items">
+        <div class="pain-item"><div class="pain-icon">⏰</div><div class="pain-text"><strong class="nl">Uren kwijt aan handmatige facturen</strong><strong class="en">Hours lost on manual invoicing</strong><span class="nl">Elke factuur opnieuw beginnen, prijzen opzoeken, typefouten.</span><span class="en">Starting every invoice from scratch, looking up prices, making typos.</span></div></div>
+        <div class="pain-item"><div class="pain-icon">📋</div><div class="pain-text"><strong class="nl">Papieren werkbonnen die verdwijnen</strong><strong class="en">Paper work orders that disappear</strong><span class="nl">Niet terug te vinden, niet leesbaar, niet digitaal beschikbaar.</span><span class="en">Can't be found, illegible, not digitally available.</span></div></div>
+        <div class="pain-item"><div class="pain-icon">📞</div><div class="pain-text"><strong class="nl">Handmatig klanten bellen voor APK</strong><strong class="en">Manually calling customers for MOT</strong><span class="nl">Wie moet er wanneer komen? Dat bijhouden kost u omzet.</span><span class="en">Who needs to come and when? Tracking that costs you revenue.</span></div></div>
+        <div class="pain-item"><div class="pain-icon">🚗</div><div class="pain-text"><strong class="nl">Geen overzicht van uw wagenpark</strong><strong class="en">No overview of your vehicle stock</strong><span class="nl">Ingekochte auto's, onderhoud, te koop — alles door elkaar in Excel.</span><span class="en">Purchased vehicles, maintenance, for sale — all mixed up in Excel.</span></div></div>
+        <div class="pain-item"><div class="pain-icon">💸</div><div class="pain-text"><strong class="nl">Openstaande facturen die u vergeet</strong><strong class="en">Outstanding invoices you forget</strong><span class="nl">Geld dat u verdiend heeft maar nooit binnenkrijgt.</span><span class="en">Money you've earned but never collect.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="wrap">
+    <div class="sol-head">
+      <div class="section-eyebrow nl">De oplossing</div>
+      <div class="section-eyebrow en">The solution</div>
+      <h2 class="section-title display nl">Alles geautomatiseerd.<br><span class="accent">Altijd up-to-date.</span></h2>
+      <h2 class="section-title display en">Everything automated.<br><span class="accent">Always up-to-date.</span></h2>
+      <p class="section-sub nl" style="margin:16px auto 0">Drivedesk denkt met u mee. Of u nu een garage runt, autos verkoopt of verhuurt — wij zorgen dat uw systeem altijd met de tijd meeloopt.</p>
+      <p class="section-sub en" style="margin:16px auto 0">Drivedesk thinks along with you. Whether you run a garage, sell cars or rent them — we make sure your system always stays current.</p>
+    </div>
+    <div class="sol-grid">
+      <div class="sol-card"><div class="sol-icon">⚡</div><h3 class="nl">Maximale efficiëntie</h3><h3 class="en">Maximum efficiency</h3><p class="nl">Factuur aanmaken in 30 seconden. Werkorder in één klik naar factuur. Alles vooraf ingevuld.</p><p class="en">Create an invoice in 30 seconds. Work order to invoice in one click. Everything pre-filled.</p></div>
+      <div class="sol-card"><div class="sol-icon">🤖</div><h3 class="nl">Volledig geautomatiseerd</h3><h3 class="en">Fully automated</h3><p class="nl">APK-herinneringen, factuurexports en betalingsherinneringen — alles gaat vanzelf. U doet niks.</p><p class="en">MOT reminders, invoice exports and payment reminders — all automatic. You do nothing.</p></div>
+      <div class="sol-card"><div class="sol-icon">🚀</div><h3 class="nl">Altijd toekomstbestendig</h3><h3 class="en">Always future-proof</h3><p class="nl">Drivedesk is geen statisch pakket. Wij volgen de nieuwste ontwikkelingen — inclusief AI-features.</p><p class="en">Drivedesk is not a static package. We follow the latest developments — including AI features.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <div class="video-inner">
+    <div class="video-head">
+      <div>
+        <div class="section-eyebrow nl">Zie het in actie</div>
+        <div class="section-eyebrow en">See it in action</div>
+        <h2 class="section-title display nl" style="color:white">Van werkorder naar<br><span class="accent">factuur in 30 seconden.</span></h2>
+        <h2 class="section-title display en" style="color:white">From work order to<br><span class="accent">invoice in 30 seconds.</span></h2>
+        <p class="section-sub nl">Bekijk hoe een monteur in minder dan een minuut een complete factuur aanmaakt — zonder een letter te typen.</p>
+        <p class="section-sub en">Watch how a mechanic creates a complete invoice in under a minute — without typing a single letter.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:32px">
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(255,255,255,0.6)">
+            <span style="width:24px;height:24px;background:rgba(16,185,129,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#10B981;font-size:12px;flex-shrink:0">✓</span>
+            <span class="nl">Kenteken invoeren — voertuig verschijnt automatisch</span>
+            <span class="en">Enter license plate — vehicle appears automatically</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(255,255,255,0.6)">
+            <span style="width:24px;height:24px;background:rgba(16,185,129,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#10B981;font-size:12px;flex-shrink:0">✓</span>
+            <span class="nl">Snelkeuze-knop klikken — prijzen al ingevuld</span>
+            <span class="en">Click quick-select button — prices already filled in</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(255,255,255,0.6)">
+            <span style="width:24px;height:24px;background:rgba(16,185,129,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#10B981;font-size:12px;flex-shrink:0">✓</span>
+            <span class="nl">Versturen — klant ontvangt factuur per e-mail</span>
+            <span class="en">Send — customer receives invoice by email</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-player">
+        <div class="video-thumb">
+          <div class="video-thumb-grid"></div>
+          <!-- Mini dashboard mockup in video -->
+          <div style="position:absolute;inset:20px;background:#0D1526;border-radius:8px;border:1px solid rgba(255,255,255,0.07);overflow:hidden;display:flex;flex-direction:column">
+            <div style="background:#0A1020;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.2);margin-left:10px">app.drivedesk.nl/invoices/new</span>
+            </div>
+            <div style="padding:16px;flex:1">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);margin-bottom:8px">BACKOFFICE / FACTUREN / NIEUWE FACTUUR</div>
+              <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+                <div style="background:rgba(0,87,255,0.2);border:1px solid rgba(0,87,255,0.3);padding:5px 10px;border-radius:6px;font-size:10px;color:#60A5FA">Kleine beurt</div>
+                <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:5px 10px;border-radius:6px;font-size:10px;color:rgba(255,255,255,0.4)">Grote beurt</div>
+                <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:5px 10px;border-radius:6px;font-size:10px;color:rgba(255,255,255,0.4)">APK</div>
+                <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:5px 10px;border-radius:6px;font-size:10px;color:rgba(255,255,255,0.4)">Banden</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;margin-bottom:8px">
+                <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:6px">
+                  <span style="color:rgba(255,255,255,0.5)">Kleine beurt</span>
+                  <span style="color:white;font-family:'JetBrains Mono',monospace">€0,00</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:10px">
+                  <span style="color:rgba(255,255,255,0.5)">Arbeid (2u × €65)</span>
+                  <span style="color:white;font-family:'JetBrains Mono',monospace">€130,00</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:flex-end">
+                <div style="background:var(--accent);padding:6px 14px;border-radius:6px;font-size:11px;color:white;font-weight:500">Verstuur naar klant →</div>
+              </div>
+            </div>
+          </div>
+          <div class="video-play">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <path d="M8 5L19 12L8 19V5Z"/>
+            </svg>
+          </div>
+          <div class="video-label nl">
+            <span class="video-timestamp">▶ 0:32</span> — Werkorder naar factuur in één klik
+          </div>
+          <div class="video-label en">
+            <span class="video-timestamp">▶ 0:32</span> — Work order to invoice in one click
+          </div>
+        </div>
+        <div class="video-stats">
+          <div class="video-stat"><div class="video-stat-v">30s</div><div class="video-stat-l nl">Factuur aanmaken</div><div class="video-stat-l en">Create invoice</div></div>
+          <div class="video-stat"><div class="video-stat-v">0×</div><div class="video-stat-l nl">Typen vereist</div><div class="video-stat-l en">Typing required</div></div>
+          <div class="video-stat"><div class="video-stat-v">1</div><div class="video-stat-l nl">Klik naar klant</div><div class="video-stat-l en">Click to customer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="feat-head">
+      <div class="section-eyebrow nl">Wat zit erin?</div>
+      <div class="section-eyebrow en">What's included?</div>
+      <h2 class="section-title display nl">Compleet. <span style="opacity:0.35">Van A tot Z.</span></h2>
+      <h2 class="section-title display en">Complete. <span style="opacity:0.35">From A to Z.</span></h2>
+      <p class="section-sub nl" style="margin:8px auto 0">Één abonnement. Alle features. Geen losse modules of verborgen kosten.</p>
+      <p class="section-sub en" style="margin:8px auto 0">One subscription. All features. No separate modules or hidden costs.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-item"><div class="feat-num">01</div><h3 class="nl">RDW-koppeling</h3><h3 class="en">Vehicle lookup</h3><p class="nl">Tik een kenteken en alle voertuiggegevens verschijnen automatisch. APK-datum, merk, model — direct in de werkorder.</p><p class="en">Enter a license plate and all vehicle data appears automatically. MOT date, make, model — directly in the work order.</p></div>
+      <div class="feat-item"><div class="feat-num">02</div><h3 class="nl">Werkorders & inspecties</h3><h3 class="en">Work orders & inspections</h3><p class="nl">Categorieën, foto's, notities, onderdelen. Overzichtelijk voor de monteur, professioneel voor de klant.</p><p class="en">Categories, photos, notes, parts. Clear for the mechanic, professional for the customer.</p></div>
+      <div class="feat-item"><div class="feat-num">03</div><h3 class="nl">Slimme facturatie</h3><h3 class="en">Smart invoicing</h3><p class="nl">Factuur vanuit werkorder in één klik. Artikelencatalogus met vaste prijzen. Fiscaal correct en wettelijk compliant.</p><p class="en">Invoice from work order in one click. Article catalogue with fixed prices. Fiscally correct and legally compliant.</p></div>
+      <div class="feat-item"><div class="feat-num">04</div><h3 class="nl">APK-herinneringen</h3><h3 class="en">MOT reminders</h3><p class="nl">8 weken voor vervaldatum krijgt uw klant automatisch een herinnering. Klanten komen vanzelf terug.</p><p class="en">8 weeks before expiry your customer automatically receives a reminder. Customers come back automatically.</p></div>
+      <div class="feat-item"><div class="feat-num">05</div><h3 class="nl">Offertes</h3><h3 class="en">Quotes</h3><p class="nl">Professionele offerte versturen, klant keurt goed via link, direct omzetten naar werkorder.</p><p class="en">Send a professional quote, customer approves via link, convert directly to work order.</p></div>
+      <div class="feat-item"><div class="feat-num">06</div><h3 class="nl">Klantenbestand</h3><h3 class="en">Customer database</h3><p class="nl">Alle klanten, voertuigen en historie op één plek. Direct zien wat een klant ooit heeft laten doen.</p><p class="en">All customers, vehicles and history in one place. Instantly see what a customer has had done before.</p></div>
+      <div class="feat-item"><div class="feat-num">07</div>
+        <h3 class="nl">KvK-koppeling <span style="font-size:12px;font-weight:400;color:var(--muted)">— binnenkort</span></h3>
+        <h3 class="en">Chamber of Commerce lookup <span style="font-size:12px;font-weight:400;color:var(--muted)">— coming soon</span></h3>
+        <p class="nl">KvK-nummer invoeren → naam, adres en BTW-nummer automatisch ingevuld. Zakelijke klanten in 5 seconden aangemaakt.</p>
+        <p class="en">Enter a KvK number → name, address and VAT number automatically filled. Business customers created in 5 seconds.</p>
+      </div>
+      <div class="feat-item"><div class="feat-num">08</div>
+        <h3 class="nl">Agenda & planning <span style="font-size:12px;font-weight:400;color:var(--muted)">— binnenkort</span></h3>
+        <h3 class="en">Agenda & planning <span style="font-size:12px;font-weight:400;color:var(--muted)">— coming soon</span></h3>
+        <p class="nl">Kalenderweergave van alle afspraken per dag of week. Direct zien wie er wanneer binnenkomt. Werkorder automatisch gekoppeld.</p>
+        <p class="en">Calendar view of all appointments per day or week. Instantly see who is coming and when. Work order automatically linked.</p>
+      </div>
+      <div class="feat-item"><div class="feat-num">09</div>
+        <h3 class="nl">WhatsApp-notificaties <span style="font-size:12px;font-weight:400;color:var(--muted)">— binnenkort</span></h3>
+        <h3 class="en">WhatsApp notifications <span style="font-size:12px;font-weight:400;color:var(--muted)">— coming soon</span></h3>
+        <p class="nl">"Uw auto is klaar." Automatisch verstuurd via WhatsApp. Geen bellen, geen wachten, tevreden klanten.</p>
+        <p class="en">"Your car is ready." Automatically sent via WhatsApp. No calling, no waiting, satisfied customers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="test-inner">
+    <div class="test-stars">★★★★★</div>
+    <div class="test-quote-mark">"</div>
+    <blockquote class="test-quote nl">Sinds we Drivedesk gebruiken besparen we <strong>meer dan 5 uur per week</strong> op administratie. Onze monteurs werken sneller, onze facturen gaan direct de deur uit en onze klanten komen vanzelf terug voor de APK.</blockquote>
+    <blockquote class="test-quote en">Since using Drivedesk we save <strong>more than 5 hours per week</strong> on administration. Our mechanics work faster, our invoices go out immediately and our customers automatically come back for their MOT.</blockquote>
+    <div class="test-author">
+      <div class="test-avatar display">M</div>
+      <div class="test-who">
+        <strong class="nl">Mark van Dijk — Eigenaar</strong>
+        <strong class="en">Mark van Dijk — Owner</strong>
+        <span>Garage Van Dijk, Nieuwegein</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="price-head">
+      <div class="price-note nl">30 dagen gratis · Geen creditcard · Maandelijks opzegbaar</div>
+      <div class="price-note en">30 days free · No credit card · Cancel anytime</div>
+      <div class="section-eyebrow nl" style="justify-content:center">Transparante prijzen</div>
+      <div class="section-eyebrow en" style="justify-content:center">Transparent pricing</div>
+      <h2 class="section-title display nl">Eerlijk geprijsd.<br><span class="accent">Geen verrassingen.</span></h2>
+      <h2 class="section-title display en">Fairly priced.<br><span class="accent">No surprises.</span></h2>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-tier">— Starter</div>
+        <div class="price-name display nl">De basis</div>
+        <div class="price-name display en">The basics</div>
+        <div class="price-tagline nl">Voor de zelfstandige ondernemer</div>
+        <div class="price-tagline en">For the independent entrepreneur</div>
+        <div class="price-amt display"><sup>€</sup>29<sub class="nl">/mnd</sub><sub class="en">/mo</sub></div>
+        <div class="price-divider"></div>
+        <ul class="price-list">
+          <li class="nl">1 medewerker</li><li class="en">1 employee</li>
+          <li class="nl">Werkorders & klanten</li><li class="en">Work orders & customers</li>
+          <li class="nl">RDW-koppeling</li><li class="en">Vehicle lookup</li>
+          <li class="nl">APK-herinneringen</li><li class="en">MOT reminders</li>
+          <li class="nl">E-mail support</li><li class="en">Email support</li>
+        </ul>
+        <a href="#" class="btn btn-dark nl">Start gratis →</a>
+        <a href="#" class="btn btn-dark en">Start free →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge nl">Populair</div>
+        <div class="featured-badge en">Popular</div>
+        <div class="price-tier" style="color:rgba(255,255,255,0.35)">— Pro</div>
+        <div class="price-name display">Pro</div>
+        <div class="price-tagline nl">Voor groeiende bedrijven</div>
+        <div class="price-tagline en">For growing businesses</div>
+        <div class="price-amt display" style="color:white"><sup>€</sup>49<sub class="nl">/mnd</sub><sub class="en">/mo</sub></div>
+        <div class="price-divider"></div>
+        <ul class="price-list">
+          <li class="nl">Tot 5 medewerkers</li><li class="en">Up to 5 employees</li>
+          <li class="nl">Alles van Starter</li><li class="en">Everything in Starter</li>
+          <li class="nl">Inspecties & facturatie</li><li class="en">Inspections & invoicing</li>
+          <li class="nl">Offertes</li><li class="en">Quotes</li>
+          <li class="nl">WhatsApp-notificaties</li><li class="en">WhatsApp notifications</li>
+          <li class="nl">Telefonische support</li><li class="en">Phone support</li>
+        </ul>
+        <a href="#" class="btn btn-primary nl">Start gratis →</a>
+        <a href="#" class="btn btn-primary en">Start free →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">— Premium</div>
+        <div class="price-name display">Premium</div>
+        <div class="price-tagline nl">Voor ambitieuze bedrijven</div>
+        <div class="price-tagline en">For ambitious businesses</div>
+        <div class="price-amt display"><sup>€</sup>79<sub class="nl">/mnd</sub><sub class="en">/mo</sub></div>
+        <div class="price-divider"></div>
+        <ul class="price-list">
+          <li class="nl">Onbeperkt medewerkers</li><li class="en">Unlimited employees</li>
+          <li class="nl">Alles van Pro</li><li class="en">Everything in Pro</li>
+          <li class="nl">Multi-vestiging</li><li class="en">Multi-location</li>
+          <li class="nl">AI-features (early access)</li><li class="en">AI features (early access)</li>
+          <li class="nl">Prioriteit support</li><li class="en">Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-dark nl">Neem contact op →</a>
+        <a href="#" class="btn btn-dark en">Contact us →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="faq-inner">
+      <div class="faq-head">
+        <div class="section-eyebrow nl" style="justify-content:center">Veelgestelde vragen</div>
+        <div class="section-eyebrow en" style="justify-content:center">Frequently asked questions</div>
+        <h2 class="section-title display nl" style="text-align:center">Alles wat u <span class="accent">wil weten.</span></h2>
+        <h2 class="section-title display en" style="text-align:center">Everything you <span class="accent">want to know.</span></h2>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Werkt Drivedesk ook voor motorhandelaren, carrosseriebedrijven of verhuurders?</span>
+            <span class="en">Does Drivedesk work for motorcycle dealers, bodywork shops or rental companies?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Ja. Drivedesk is gebouwd voor de hele autobranche — niet alleen voor garagisten. Garages, autohandelaren, motorhandelaren, scooterhandelaren, carrosseriebedrijven, leasebedrijven en verhuurders gebruiken Drivedesk. De artikelencatalogus, werkorders en facturatie zijn flexibel genoeg voor elk type bedrijf.</p>
+            <p class="en">Yes. Drivedesk is built for the entire automotive industry — not just garages. Garages, car dealers, motorcycle dealers, scooter dealers, bodywork shops, lease companies and rental companies all use Drivedesk. The article catalogue, work orders and invoicing are flexible enough for any type of business.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Kan ik mijn bestaande data importeren vanuit mijn huidige systeem?</span>
+            <span class="en">Can I import my existing data from my current system?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Wij helpen u met de migratie. Neem contact op via info@drivedesk.nl en we kijken samen hoe we uw bestaande klanten, voertuigen en werkorders kunnen overzetten. Dit is inbegrepen bij het Pro en Premium plan.</p>
+            <p class="en">We help you with the migration. Contact us at info@drivedesk.nl and we'll look together at how to transfer your existing customers, vehicles and work orders. This is included in the Pro and Premium plans.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Hoe zit het met mijn data als ik stop met Drivedesk?</span>
+            <span class="en">What happens to my data if I stop using Drivedesk?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Uw data is altijd van u. Als u stopt kunt u al uw facturen, klanten en werkorders exporteren voordat uw account wordt gesloten. Wij bewaren uw facturen conform de Nederlandse bewaarplicht van 7 jaar — u kunt deze altijd opvragen.</p>
+            <p class="en">Your data is always yours. If you stop you can export all your invoices, customers and work orders before your account is closed. We keep your invoices in accordance with the Dutch retention obligation of 7 years — you can always request these.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Hoe werkt de 30 dagen gratis periode?</span>
+            <span class="en">How does the 30 day free trial work?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">U krijgt 30 dagen volledige toegang tot Drivedesk Pro zonder betaling. Geen creditcard nodig, geen automatische incasso. Na 30 dagen kiest u zelf of u wil doorgaan en welk abonnement past. Stopt u? Dan wordt uw account gewoon afgesloten.</p>
+            <p class="en">You get 30 days of full access to Drivedesk Pro without payment. No credit card needed, no automatic billing. After 30 days you choose whether to continue and which plan suits you. Stop? Then your account is simply closed.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Werkt Drivedesk ook op mijn telefoon of tablet?</span>
+            <span class="en">Does Drivedesk work on my phone or tablet?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Ja. Drivedesk werkt volledig in de browser — op desktop, laptop, tablet en telefoon. Monteurs gebruiken het op een tablet in de werkplaats, de eigenaar op de laptop achter het bureau. Geen app download vereist.</p>
+            <p class="en">Yes. Drivedesk works fully in the browser — on desktop, laptop, tablet and phone. Mechanics use it on a tablet in the workshop, the owner on the laptop at the desk. No app download required.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Kan mijn monteur ook bij de omzet en facturen?</span>
+            <span class="en">Can my mechanic see the revenue and invoices?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Nee. Drivedesk heeft een duidelijk rolsysteem. Eigenaar ziet alles — werkorders, klanten, facturen, omzet. Monteurs zien alleen de werkplaats — werkorders en inspecties. Financiële informatie is altijd afgeschermd voor medewerkers.</p>
+            <p class="en">No. Drivedesk has a clear role system. The owner sees everything — work orders, customers, invoices, revenue. Mechanics only see the workshop — work orders and inspections. Financial information is always protected from employees.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Wanneer komen de AI-features?</span>
+            <span class="en">When are the AI features coming?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">We werken actief aan AI-features zoals automatische schadeherkenning op foto en slimme werkbon-generatie. Klanten met een Premium abonnement krijgen als eerste toegang zodra deze beschikbaar zijn. Volg onze updates via de changelog op de website.</p>
+            <p class="en">We are actively working on AI features such as automatic damage recognition from photos and smart work order generation. Premium subscribers get first access as soon as these become available. Follow our updates via the changelog on the website.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="nl">Wat als ik hulp nodig heb?</span>
+            <span class="en">What if I need help?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="nl">Wij staan voor u klaar. Starter krijgt e-mail support. Pro en Premium krijgen telefonische support en een persoonlijk onboarding-gesprek. We reageren altijd binnen één werkdag. Bereikbaar via info@drivedesk.nl.</p>
+            <p class="en">We are here for you. Starter gets email support. Pro and Premium get phone support and a personal onboarding call. We always respond within one business day. Reachable at info@drivedesk.nl.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final">
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="section-eyebrow nl" style="justify-content:center;color:rgba(0,87,255,0.7)">Klaar om te beginnen?</div>
+    <div class="section-eyebrow en" style="justify-content:center;color:rgba(0,87,255,0.7)">Ready to start?</div>
+    <h2 class="section-title display nl" style="color:white;text-align:center;margin-left:auto;margin-right:auto">Stop met tijd verliezen.<br><span class="accent">Begin vandaag.</span></h2>
+    <h2 class="section-title display en" style="color:white;text-align:center;margin-left:auto;margin-right:auto">Stop wasting time.<br><span class="accent">Start today.</span></h2>
+    <p class="section-sub nl" style="margin:0 auto 40px;text-align:center">30 dagen gratis proberen. Geen creditcard nodig. Voor garages, handelaren en verhuurders.</p>
+    <p class="section-sub en" style="margin:0 auto 40px;text-align:center">30 days free trial. No credit card needed. For garages, dealers and rental companies.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-primary btn-lg nl">Gratis starten →</a>
+      <a href="#" class="btn btn-primary btn-lg en">Start free →</a>
+      <a href="#" class="btn btn-ghost-light btn-lg nl">Plan een demo</a>
+      <a href="#" class="btn btn-ghost-light btn-lg en">Schedule a demo</a>
+    </div>
+    <p class="cta-note nl">Geen creditcard · Maandelijks opzegbaar · Setup in 5 minuten</p>
+    <p class="cta-note en">No credit card · Cancel anytime · Setup in 5 minutes</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4" fill="white"/>
+              <path d="M12 4C12 4 8 7 8 12C8 17 12 20 12 20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M12 4C12 4 16 7 16 12C16 17 12 20 12 20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M4 12H20" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Drivedesk
+        </a>
+        <p class="nl">Software voor garages, autohandelaren, motorhandelaren en verhuurders. Gebouwd voor ondernemers die willen groeien.</p>
+        <p class="en">Software for garages, car dealers, motorcycle dealers and rental companies. Built for entrepreneurs who want to grow.</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="nl">Product</h4><h4 class="en">Product</h4>
+        <ul>
+          <li><a href="#features" class="nl">Features</a><a href="#features" class="en">Features</a></li>
+          <li><a href="#pricing" class="nl">Prijzen</a><a href="#pricing" class="en">Pricing</a></li>
+          <li><a href="#faq" class="nl">FAQ</a><a href="#faq" class="en">FAQ</a></li>
+          <li><a href="#" class="nl">Inloggen</a><a href="#" class="en">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4 class="nl">Bedrijf</h4><h4 class="en">Company</h4>
+        <ul>
+          <li><a href="#" class="nl">Over ons</a><a href="#" class="en">About us</a></li>
+          <li><a href="#" class="nl">Contact</a><a href="#" class="en">Contact</a></li>
+          <li><a href="#" class="nl">Privacyverklaring</a><a href="#" class="en">Privacy policy</a></li>
+          <li><a href="#" class="nl">Algemene voorwaarden</a><a href="#" class="en">Terms of service</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@drivedesk.nl">info@drivedesk.nl</a></li>
+          <li><a href="#" class="nl">Support</a><a href="#" class="en">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Drivedesk — KvK 90123456</span>
+      <span class="nl">Gebouwd in Nederland 🇳🇱</span>
+      <span class="en">Built in the Netherlands 🇳🇱</span>
+      <span>v2.4 · Vercel · Amsterdam</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function setLang(lang){
+  document.body.className='lang-'+lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active',b.textContent.trim().toLowerCase()===lang)
+  });
+  document.documentElement.lang=lang;
+}
+
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+// Scroll animations
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.animation='fadeUp 0.6s ease forwards';
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.08});
+
+document.querySelectorAll('.sol-card,.feat-item,.pain-item,.price-card,.stat-item,.sp-logo,.faq-item,.video-stat').forEach(el=>{
+  el.style.opacity='0';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
