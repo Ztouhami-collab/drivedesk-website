@@ -161,6 +161,24 @@ h2.stitle .blue{color:var(--blue)}
 .feat-item h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
 .feat-item p{font-size:13px;color:var(--muted);line-height:1.65}
 
+/* ===== DEMO FORM ===== */
+.demo-form-section{background:var(--paper);padding:96px 48px;border-top:1px solid var(--line)}
+.demo-form-inner{max-width:600px;margin:0 auto;text-align:center}
+.demo-form{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:40px;margin-top:40px;text-align:left}
+.demo-form-group{margin-bottom:20px}
+.demo-form-group label{display:block;font-size:13px;font-weight:500;color:var(--ink-soft);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;text-transform:uppercase}
+.demo-form-group input,.demo-form-group select,.demo-form-group textarea{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--paper);transition:border-color 0.15s;outline:none}
+.demo-form-group input:focus,.demo-form-group select:focus,.demo-form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.08)}
+.demo-form-group textarea{resize:vertical;min-height:100px}
+.demo-form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.demo-form-submit{width:100%;padding:13px;background:var(--blue);color:white;border:none;border-radius:7px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.18s;margin-top:8px}
+.demo-form-submit:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.demo-success{display:none;text-align:center;padding:32px;background:var(--blue-light);border:1px solid var(--blue-soft);border-radius:12px;margin-top:16px}
+.demo-success-icon{font-size:40px;margin-bottom:12px}
+.demo-success h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--blue);margin-bottom:8px}
+.demo-success p{font-size:14px;color:var(--muted)}
+@media(max-width:900px){.demo-form-row{grid-template-columns:1fr}.demo-form-section{padding:56px 20px}}
+
 /* ===== COMING SOON ===== */
 .coming-soon{background:var(--bg);padding:96px 48px}
 .cs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:40px}
@@ -310,8 +328,8 @@ footer{background:var(--dark);padding:56px 48px 32px}
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <span class="nl">30 dagen gratis proberen — geen creditcard nodig. <a href="#pricing">Bekijk plannen →</a></span>
-  <span class="en">30 days free trial — no credit card required. <a href="#pricing">View plans →</a></span>
+  <span class="nl">Persoonlijke onboarding — wij helpen u op weg. <a href="#demo-form">Vraag een demo aan →</a></span>
+  <span class="en">Personal onboarding — we help you get started. <a href="#demo-form">Request a demo →</a></span>
 </div>
 
 <!-- NAV -->
@@ -344,8 +362,8 @@ footer{background:var(--dark);padding:56px 48px 32px}
       </div>
       <a href="#" class="btn btn-ghost btn-sm nl">Inloggen</a>
       <a href="#" class="btn btn-ghost btn-sm en">Login</a>
-      <a href="#pricing" class="btn btn-blue nl">Gratis starten</a>
-      <a href="#pricing" class="btn btn-blue en">Start free</a>
+      <a href="#pricing" class="btn btn-blue nl">Vraag een demo aan</a>
+      <a href="#pricing" class="btn btn-blue en">Request a demo</a>
     </div>
   </div>
 </nav>
@@ -368,13 +386,13 @@ footer{background:var(--dark);padding:56px 48px 32px}
         <span class="en">From work order to invoice in one system. For <strong>garages, car dealers, motorcycle dealers and rental companies.</strong></span>
       </p>
       <div class="hero-actions f3">
-        <a href="#pricing" class="btn btn-blue btn-lg nl">Gratis 30 dagen proberen →</a>
-        <a href="#pricing" class="btn btn-blue btn-lg en">Start 30 days free →</a>
+        <a href="#pricing" class="btn btn-blue btn-lg nl">Vraag een demo aan →</a>
+        <a href="#pricing" class="btn btn-blue btn-lg en">Request a demo →</a>
         <a href="#demo" class="btn btn-ghost btn-lg nl">Bekijk de demo</a>
         <a href="#demo" class="btn btn-ghost btn-lg en">Watch the demo</a>
       </div>
-      <p class="hero-note f3 nl">Geen creditcard · Maandelijks opzegbaar · Setup in 5 minuten</p>
-      <p class="hero-note f3 en">No credit card · Cancel anytime · Setup in 5 minutes</p>
+      <p class="hero-note f3 nl">Laat uw gegevens achter en wij helpen u verder · Persoonlijke onboarding</p>
+      <p class="hero-note f3 en">Leave your details and we'll help you get started · Personal onboarding</p>
     </div>
     <div class="hero-right f4">
       <div class="mockup">
@@ -470,8 +488,8 @@ footer{background:var(--dark);padding:56px 48px 32px}
         <div class="pain-check"><div class="check-icon">✓</div><p class="nl">WhatsApp-melding als de auto klaar is</p><p class="en">WhatsApp notification when the car is ready</p></div>
         <div class="pain-check"><div class="check-icon">✓</div><p class="nl">Openstaand-board toont direct welke facturen wachten</p><p class="en">Outstanding board shows which invoices are pending</p></div>
         <div class="pain-cta">
-          <a href="#pricing" class="btn btn-blue nl" style="width:100%">Gratis proberen →</a>
-          <a href="#pricing" class="btn btn-blue en" style="width:100%">Try for free →</a>
+          <a href="#demo-form" class="btn btn-blue nl" style="width:100%">Vraag een demo aan →</a>
+          <a href="#demo-form" class="btn btn-blue en" style="width:100%">Request a demo →</a>
         </div>
       </div>
     </div>
@@ -581,8 +599,8 @@ footer{background:var(--dark);padding:56px 48px 32px}
 <section class="pricing" id="pricing">
   <div class="wrap">
     <div class="price-head">
-      <div class="price-badge nl">30 dagen gratis · Geen creditcard · Maandelijks opzegbaar</div>
-      <div class="price-badge en">30 days free · No credit card · Cancel anytime</div>
+      <div class="price-badge nl">Persoonlijke onboarding · Wij helpen u op weg · Maandelijks opzegbaar</div>
+      <div class="price-badge en">Personal onboarding · We help you get started · Cancel anytime</div>
       <h2 class="stitle nl" style="text-align:center">Eerlijk geprijsd.<br><span class="blue">Geen verrassingen.</span></h2>
       <h2 class="stitle en" style="text-align:center">Fairly priced.<br><span class="blue">No surprises.</span></h2>
     </div>
@@ -603,7 +621,7 @@ footer{background:var(--dark);padding:56px 48px 32px}
           <li class="nl">E-mail support</li><li class="en">Email support</li>
         </ul>
         <a href="#" class="btn btn-ghost nl">Start gratis →</a>
-        <a href="#" class="btn btn-ghost en">Start free →</a>
+        <a href="#" class="btn btn-ghost en">Request a demo →</a>
       </div>
       <div class="price-card featured">
         <div class="featured-badge nl">Meest gekozen</div>
@@ -623,7 +641,7 @@ footer{background:var(--dark);padding:56px 48px 32px}
           <li class="nl">Telefonische support</li><li class="en">Phone support</li>
         </ul>
         <a href="#" class="btn btn-blue nl">Start gratis →</a>
-        <a href="#" class="btn btn-blue en">Start free →</a>
+        <a href="#" class="btn btn-blue en">Request a demo →</a>
       </div>
       <div class="price-card">
         <div class="price-tier">— Premium</div>
@@ -639,8 +657,83 @@ footer{background:var(--dark);padding:56px 48px 32px}
           <li class="nl">AI-features (early access)</li><li class="en">AI features (early access)</li>
           <li class="nl">Prioriteit support</li><li class="en">Priority support</li>
         </ul>
-        <a href="#" class="btn btn-ghost nl">Neem contact op →</a>
-        <a href="#" class="btn btn-ghost en">Contact us →</a>
+        <a href="#demo-form" class="btn btn-ghost nl">Neem contact op →</a>
+        <a href="#demo-form" class="btn btn-ghost en">Contact us →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO FORM -->
+<section class="demo-form-section" id="demo-form">
+  <div class="demo-form-inner">
+    <div class="eyebrow nl" style="justify-content:center">Gratis proberen</div>
+    <div class="eyebrow en" style="justify-content:center">Try for free</div>
+    <h2 class="stitle nl" style="text-align:center">Laat uw gegevens achter.<br><span class="blue">Wij helpen u verder.</span></h2>
+    <h2 class="stitle en" style="text-align:center">Leave your details.<br><span class="blue">We'll help you get started.</span></h2>
+    <p class="ssub nl" style="margin:0 auto;text-align:center">Vul het formulier in en wij nemen binnen 1 werkdag contact op voor een persoonlijke demo en onboarding.</p>
+    <p class="ssub en" style="margin:0 auto;text-align:center">Fill in the form and we'll contact you within 1 business day for a personal demo and onboarding.</p>
+
+    <div class="demo-form">
+      <form id="demoForm" action="https://formspree.io/f/xykaeljo" method="POST">
+        <div class="demo-form-row">
+          <div class="demo-form-group">
+            <label class="nl">Uw naam *</label>
+            <label class="en">Your name *</label>
+            <input type="text" name="naam" placeholder="Jan de Vries" required>
+          </div>
+          <div class="demo-form-group">
+            <label class="nl">Bedrijfsnaam *</label>
+            <label class="en">Company name *</label>
+            <input type="text" name="bedrijfsnaam" placeholder="Garage de Vries" required>
+          </div>
+        </div>
+        <div class="demo-form-row">
+          <div class="demo-form-group">
+            <label class="nl">E-mailadres *</label>
+            <label class="en">Email address *</label>
+            <input type="email" name="email" placeholder="info@uwgarage.nl" required>
+          </div>
+          <div class="demo-form-group">
+            <label class="nl">Telefoonnummer</label>
+            <label class="en">Phone number</label>
+            <input type="tel" name="telefoon" placeholder="06-12345678">
+          </div>
+        </div>
+        <div class="demo-form-group">
+          <label class="nl">Type bedrijf</label>
+          <label class="en">Business type</label>
+          <select name="type_bedrijf">
+            <option value="" class="nl">Selecteer een optie...</option>
+            <option value="" class="en">Select an option...</option>
+            <option value="garage" class="nl">Garage / Werkplaats</option>
+            <option value="garage" class="en">Garage / Workshop</option>
+            <option value="autohandel" class="nl">Autohandelaar</option>
+            <option value="autohandel" class="en">Car dealer</option>
+            <option value="motorhandel" class="nl">Motorhandelaar</option>
+            <option value="motorhandel" class="en">Motorcycle dealer</option>
+            <option value="verhuur" class="nl">Verhuurbedrijf</option>
+            <option value="verhuur" class="en">Rental company</option>
+            <option value="anders" class="nl">Anders</option>
+            <option value="anders" class="en">Other</option>
+          </select>
+        </div>
+        <div class="demo-form-group">
+          <label class="nl">Vraag of opmerking (optioneel)</label>
+          <label class="en">Question or comment (optional)</label>
+          <textarea name="opmerking" placeholder="Bijv. ik gebruik nu papieren werkbonnen en wil digitaliseren..."></textarea>
+        </div>
+        <input type="hidden" name="_subject" value="Nieuwe demo aanvraag — Drivedesk">
+        <input type="hidden" name="_next" value="">
+        <button type="submit" class="demo-form-submit nl">Verstuur aanvraag →</button>
+        <button type="submit" class="demo-form-submit en">Send request →</button>
+      </form>
+      <div class="demo-success" id="demoSuccess">
+        <div class="demo-success-icon">✓</div>
+        <h3 class="nl">Aanvraag ontvangen!</h3>
+        <h3 class="en">Request received!</h3>
+        <p class="nl">Bedankt! Wij nemen binnen 1 werkdag contact met u op voor een persoonlijke demo.</p>
+        <p class="en">Thank you! We'll contact you within 1 business day for a personal demo.</p>
       </div>
     </div>
   </div>
@@ -702,13 +795,13 @@ footer{background:var(--dark);padding:56px 48px 32px}
     <p class="ssub nl" style="margin:0 auto 40px;text-align:center">30 dagen gratis. Geen creditcard. Opzegbaar wanneer u wilt.</p>
     <p class="ssub en" style="margin:0 auto 40px;text-align:center">30 days free. No credit card. Cancel whenever you want.</p>
     <div class="cta-btns">
-      <a href="#" class="btn btn-blue btn-lg nl">Gratis starten →</a>
-      <a href="#" class="btn btn-blue btn-lg en">Start free →</a>
+      <a href="#" class="btn btn-blue btn-lg nl">Vraag een demo aan →</a>
+      <a href="#" class="btn btn-blue btn-lg en">Request a demo →</a>
       <a href="mailto:info@drivedesk.nl" class="btn btn-ghost-white btn-lg nl">Plan een demo</a>
       <a href="mailto:info@drivedesk.nl" class="btn btn-ghost-white btn-lg en">Schedule a demo</a>
     </div>
-    <p class="cta-note nl">Geen creditcard · Maandelijks opzegbaar · Setup in 5 minuten</p>
-    <p class="cta-note en">No credit card · Cancel anytime · Setup in 5 minutes</p>
+    <p class="cta-note nl">Laat uw gegevens achter · Wij nemen binnen 1 werkdag contact op</p>
+    <p class="cta-note en">Leave your details · We'll contact you within 1 business day</p>
   </div>
 </section>
 
@@ -761,6 +854,27 @@ footer{background:var(--dark);padding:56px 48px 32px}
 </footer>
 
 <script>
+document.getElementById('demoForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('demoSuccess').style.display = 'block';
+    } else {
+      alert('Er is iets misgegaan. Probeer het opnieuw of mail naar info@drivedesk.nl');
+    }
+  } catch(err) {
+    alert('Er is iets misgegaan. Probeer het opnieuw of mail naar info@drivedesk.nl');
+  }
+});
+
 function setLang(l){
   document.body.className='lang-'+l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim().toLowerCase()===l));
